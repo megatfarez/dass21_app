@@ -4,7 +4,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 # --- Google Sheets setup ---
-# Load credentials directly from Streamlit secrets (already in TOML format)
+# Load credentials directly from Streamlit secrets (TOML format)
 creds_dict = dict(st.secrets["gcp_service_account"])
 
 scope = ["https://spreadsheets.google.com/feeds",
@@ -13,8 +13,16 @@ scope = ["https://spreadsheets.google.com/feeds",
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 
-# Open the Google Sheet (make sure you created this sheet and shared it with the service account)
+# Open the Google Sheet (make sure it exists and is shared with the service account)
 sheet = client.open("DASS21_Results_Malay").sheet1
+
+# --- General Information ---
+st.title("Saringan Minda Sihat - DASS21 (Bahasa Melayu)")
+
+student_name = st.text_input("Nama Pelajar")
+student_id = st.text_input("ID Pelajar")
+campus_name = st.text_input("Kampus")
+phone_number = st.text_input("No. Telefon")
 
 # --- Soalan DASS21 dalam Bahasa Melayu ---
 questions_texts = [
@@ -56,19 +64,13 @@ options = {
     3: "Sangat kerap"
 }
 
-# --- UI ---
-st.title("Saringan Minda Sihat - DASS21 (Bahasa Melayu)")
-
-# Input untuk Nama / ID
-student_name = st.text_input("Nama / ID Pelajar (Optional)")
-
-# Tunjukkan semua soalan
+# --- Display Questions ---
 responses = {}
 for i, q in enumerate(questions_texts, start=1):
     responses[i] = st.radio(f"{i}. {q}", list(options.keys()),
                             format_func=lambda x: options[x], index=0)
 
-# Bila pelajar hantar jawapan
+# --- Submit Button ---
 if st.button("Hantar"):
     # Kira skor
     scores = {}
@@ -95,7 +97,10 @@ if st.button("Hantar"):
     # Simpan ke Google Sheets
     row = [
         str(datetime.datetime.now()),
-        student_name
+        student_name,
+        student_id,
+        campus_name,
+        phone_number
     ] + list(responses.values()) + [
         scores["Stres"], scores["Anzieti"], scores["Kemurungan"],
         results["Tahap_Stres"], results["Tahap_Anzieti"], results["Tahap_Kemurungan"]
