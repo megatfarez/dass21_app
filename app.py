@@ -19,10 +19,10 @@ sheet = client.open("DASS21_Results_Malay").sheet1
 # --- General Information ---
 st.title("Saringan Minda Sihat - DASS21 (Bahasa Melayu)")
 
-student_name = st.text_input("Nama / ID Pelajar (Optional)")
-student_id = st.text_input("Nombor Matrik / Student ID")
-campus_name = st.text_input("Nama Kampus")
-phone_number = st.text_input("Nombor Telefon")
+student_name = st.text_input("Nama")
+student_id = st.text_input("Student ID")
+campus_name = st.text_input("Kampus")
+phone_number = st.text_input("No. Telefon")
 
 # --- Soalan DASS21 dalam Bahasa Melayu ---
 questions_texts = [
@@ -115,4 +115,4 @@ if st.button("Hantar"):
         ]
         sheet.append_row(row)
 
-        st.success("✅ Jawapan anda telah direkodkan ke Google Sheets.")
+        st.success("✅ Jawapan anda telah direkodkan oleh Kaunselor UniKL")
