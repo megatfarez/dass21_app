@@ -5,13 +5,13 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import json
 
-st.write(type(st.secrets["gcp_service_account"]))
+#st.write(type(st.secrets["gcp_service_account"]))
 
 # --- Google Sheets setup ---
 # Load JSON credentials from Streamlit Secrets
-#creds_json = st.secrets["gcp_service_account"]["credentials"]
-#creds_dict = json.loads(creds_json)
-creds_dict = dict(st.secrets["gcp_service_account"])
+creds_json = st.secrets["gcp_service_account"]["credentials"]
+creds_dict = json.loads(creds_json)
+#creds_dict = dict(st.secrets["gcp_service_account"])
 
 scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/drive"]
