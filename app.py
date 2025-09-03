@@ -19,10 +19,10 @@ sheet = client.open("DASS21_Results_Malay").sheet1
 # --- General Information ---
 st.title("Saringan Minda Sihat - DASS21 (Bahasa Melayu)")
 
-student_name = st.text_input("Nama Pelajar")
-student_id = st.text_input("ID Pelajar")
-campus_name = st.text_input("Kampus")
-phone_number = st.text_input("No. Telefon")
+student_name = st.text_input("Nama / ID Pelajar (Optional)")
+student_id = st.text_input("Nombor Matrik / Student ID")
+campus_name = st.text_input("Nama Kampus")
+phone_number = st.text_input("Nombor Telefon")
 
 # --- Soalan DASS21 dalam Bahasa Melayu ---
 questions_texts = [
@@ -67,44 +67,52 @@ options = {
 # --- Display Questions ---
 responses = {}
 for i, q in enumerate(questions_texts, start=1):
-    responses[i] = st.radio(f"{i}. {q}", list(options.keys()),
-                            format_func=lambda x: options[x], index=0)
+    responses[i] = st.radio(
+        f"{i}. {q}",
+        list(options.keys()),
+        format_func=lambda x: options[x],
+        index=None  # ❌ no preselection
+    )
 
 # --- Submit Button ---
 if st.button("Hantar"):
-    # Kira skor
-    scores = {}
-    for kategori, qnums in categories.items():
-        scores[kategori] = sum(responses[q] for q in qnums)
+    # Validation check: ensure no skipped questions
+    if any(answer is None for answer in responses.values()):
+        st.error("⚠️ Sila jawab semua soalan sebelum menghantar borang.")
+    else:
+        # Kira skor
+        scores = {}
+        for kategori, qnums in categories.items():
+            scores[kategori] = sum(responses[q] for q in qnums)
 
-    # Interpretasi tahap
-    severity = {
-        "Kemurungan": [(0,5,"Normal"), (6,7,"Ringan"), (8,10,"Sederhana"), (11,14,"Teruk"), (15,100,"Sangat Teruk")],
-        "Anzieti": [(0,4,"Normal"), (5,6,"Ringan"), (7,8,"Sederhana"), (9,10,"Teruk"), (11,100,"Sangat Teruk")],
-        "Stres": [(0,7,"Normal"), (8,9,"Ringan"), (10,13,"Sederhana"), (14,17,"Teruk"), (18,100,"Sangat Teruk")]
-    }
+        # Interpretasi tahap
+        severity = {
+            "Kemurungan": [(0,5,"Normal"), (6,7,"Ringan"), (8,10,"Sederhana"), (11,14,"Teruk"), (15,100,"Sangat Teruk")],
+            "Anzieti": [(0,4,"Normal"), (5,6,"Ringan"), (7,8,"Sederhana"), (9,10,"Teruk"), (11,100,"Sangat Teruk")],
+            "Stres": [(0,7,"Normal"), (8,9,"Ringan"), (10,13,"Sederhana"), (14,17,"Teruk"), (18,100,"Sangat Teruk")]
+        }
 
-    results = {}
-    for kategori, value in scores.items():
-        tahap = next(label for low, high, label in severity[kategori] if low <= value <= high)
-        results[f"Tahap_{kategori}"] = tahap
+        results = {}
+        for kategori, value in scores.items():
+            tahap = next(label for low, high, label in severity[kategori] if low <= value <= high)
+            results[f"Tahap_{kategori}"] = tahap
 
-    # Paparkan keputusan
-    st.subheader("Keputusan Anda")
-    for kategori in categories.keys():
-        st.write(f"**{kategori}: {scores[kategori]} → {results[f'Tahap_{kategori}']}**")
+        # Paparkan keputusan
+        st.subheader("Keputusan Anda")
+        for kategori in categories.keys():
+            st.write(f"**{kategori}: {scores[kategori]} → {results[f'Tahap_{kategori}']}**")
 
-    # Simpan ke Google Sheets
-    row = [
-        str(datetime.datetime.now()),
-        student_name,
-        student_id,
-        campus_name,
-        phone_number
-    ] + list(responses.values()) + [
-        scores["Stres"], scores["Anzieti"], scores["Kemurungan"],
-        results["Tahap_Stres"], results["Tahap_Anzieti"], results["Tahap_Kemurungan"]
-    ]
-    sheet.append_row(row)
+        # Simpan ke Google Sheets
+        row = [
+            str(datetime.datetime.now()),
+            student_name,
+            student_id,
+            campus_name,
+            phone_number
+        ] + list(responses.values()) + [
+            scores["Stres"], scores["Anzieti"], scores["Kemurungan"],
+            results["Tahap_Stres"], results["Tahap_Anzieti"], results["Tahap_Kemurungan"]
+        ]
+        sheet.append_row(row)
 
-    st.success("✅ Jawapan anda telah direkodkan ke Google Sheets.")
+        st.success("✅ Jawapan anda telah direkodkan ke Google Sheets.")
