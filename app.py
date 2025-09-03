@@ -8,7 +8,7 @@ import json
 # --- Google Sheets setup ---
 # Load JSON credentials from Streamlit Secrets
 creds_json = st.secrets["gcp_service_account"]["credentials"]
-creds_dict = json.loads(creds_json)
+creds_dict = json.loads(creds_json.strip())  # strip removes extra whitespace
 
 scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/drive"]
