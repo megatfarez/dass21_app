@@ -3,6 +3,16 @@ import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+# --- Hide Streamlit default UI elements (menu, footer, header) ---
+hide_streamlit_style = """
+    <style>
+    #MainMenu {visibility: hidden;}  /* Hide hamburger menu */
+    footer {visibility: hidden;}     /* Hide footer */
+    header {visibility: hidden;}     /* Hide Streamlit header */
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 # --- Google Sheets setup ---
 # Load credentials directly from Streamlit secrets (TOML format)
 creds_dict = dict(st.secrets["gcp_service_account"])
