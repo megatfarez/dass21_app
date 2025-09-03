@@ -3,12 +3,13 @@ import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-# --- Hide Streamlit default UI elements (menu, footer, header) ---
+# --- Hide Streamlit default UI elements (menu, footer, header, GitHub icon) ---
 hide_streamlit_style = """
     <style>
-    #MainMenu {visibility: hidden;}  /* Hide hamburger menu */
-    footer {visibility: hidden;}     /* Hide footer */
-    header {visibility: hidden;}     /* Hide Streamlit header */
+    #MainMenu {visibility: hidden;}                  /* Hide hamburger menu */
+    footer {visibility: hidden;}                     /* Hide footer */
+    header {visibility: hidden;}                     /* Hide Streamlit header */
+    a[data-testid="stAppGithubIcon"] {visibility: hidden;}  /* Hide GitHub icon */
     </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
