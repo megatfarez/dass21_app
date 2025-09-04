@@ -21,10 +21,10 @@ scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
-sheet = client.open("DASS21_Results_Malay2").sheet1
+sheet = client.open("DASS21_Results_Malay").sheet1
 
 # --- General Information ---
-st.title("Saringan Minda Sihat UniKL")
+st.title("Saringan Minda Sihat UniKL2")
 
 student_name = st.text_input("Nama")
 student_id = st.text_input("Student ID")
