@@ -90,6 +90,9 @@ if st.button("Hantar"):
     # Validation check: ensure no skipped questions
     if any(answer is None for answer in responses.values()):
         st.error("⚠️ Sila jawab semua soalan sebelum menghantar borang.")
+    # 🔒 validation: ensure Student ID and Kampus are compulsory
+    elif not student_id.strip() or not campus_name.strip():
+        st.error("⚠️ Sila isi 'Student ID' dan 'Kampus' sebelum menghantar borang.")
     else:
         # Kira skor
         scores = {}
