@@ -15,16 +15,11 @@ hide_streamlit_style = """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 # --- Google Sheets setup ---
-# Load credentials directly from Streamlit secrets (TOML format)
 creds_dict = dict(st.secrets["gcp_service_account"])
-
 scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/drive"]
-
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
-
-# Open the Google Sheet (make sure it exists and is shared with the service account)
 sheet = client.open("DASS21_Results_Malay").sheet1
 
 # --- General Information ---
@@ -82,17 +77,17 @@ for i, q in enumerate(questions_texts, start=1):
         f"{i}. {q}",
         list(options.keys()),
         format_func=lambda x: options[x],
-        index=None  # ❌ no preselection
+        index=None
     )
 
 # --- Submit Button ---
 if st.button("Hantar"):
-    # Validation check: ensure no skipped questions
-    if any(answer is None for answer in responses.values()):
-        st.error("⚠️ Sila jawab semua soalan sebelum menghantar borang.")
-    # 🔒 validation: ensure Student ID and Kampus are compulsory
-    elif len(student_id.strip()) == 0 or len(campus_name.strip()) == 0:
+    # 🔒 Validation 1: Student ID and Kampus must be filled
+    if len(student_id.strip()) == 0 or len(campus_name.strip()) == 0:
         st.error("⚠️ Sila isi 'Student ID' dan 'Kampus' sebelum menghantar borang.")
+    # 🔒 Validation 2: all questions must be answered
+    elif any(answer is None for answer in responses.values()):
+        st.error("⚠️ Sila jawab semua soalan sebelum menghantar borang.")
     else:
         # Kira skor
         scores = {}
