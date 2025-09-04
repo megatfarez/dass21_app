@@ -10,7 +10,8 @@ hide_streamlit_style = """
     footer {visibility: hidden;}                     /* Hide footer */
     header {visibility: hidden;}                     /* Hide Streamlit header */
     a[data-testid="stAppGithubIcon"] {visibility: hidden;}  /* Hide GitHub icon */
-    div[data-testid="stStatusWidget"] {display: none;}      /* Hide "Manage app" button */
+    div[data-testid="stStatusWidget"] {display: none !important;}  /* Hide status widget */
+    iframe[title="Streamlit status bar"] {display: none !important;}  /* Hide Manage app */
     </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
@@ -24,7 +25,7 @@ client = gspread.authorize(creds)
 sheet = client.open("DASS21_Results_Malay").sheet1
 
 # --- General Information ---
-st.title("Saringan Minda Sihat UniKL2")
+st.title("Saringan Minda Sihat UniKL3")
 
 student_name = st.text_input("Nama")
 student_id = st.text_input("Student ID")
