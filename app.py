@@ -82,11 +82,8 @@ for i, q in enumerate(questions_texts, start=1):
 
 # --- Submit Button ---
 if st.button("Hantar"):
-    # 🔒 Validation 1: Student ID and Kampus must be filled
-    if len(student_id.strip()) == 0 or len(campus_name.strip()) == 0:
-        st.error("⚠️ Sila isi 'Student ID' dan 'Kampus' sebelum menghantar borang.")
-    # 🔒 Validation 2: all questions must be answered
-    elif any(answer is None for answer in responses.values()):
+    # Validation: all questions must be answered
+    if any(answer is None for answer in responses.values()):
         st.error("⚠️ Sila jawab semua soalan sebelum menghantar borang.")
     else:
         # Kira skor
