@@ -23,7 +23,7 @@ client = gspread.authorize(creds)
 sheet = client.open("DASS21_Results_Malay").sheet1
 
 # --- General Information ---
-st.title("Saringan Minda Sihat UniKL1")
+st.title("Saringan Minda Sihat UniKL")
 
 student_name = st.text_input("Nama")
 student_id = st.text_input("Student ID")
