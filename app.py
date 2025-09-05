@@ -9,7 +9,9 @@ hide_streamlit_style = """
     #MainMenu {visibility: hidden;}                  /* Hide hamburger menu */
     footer {visibility: hidden;}                     /* Hide footer */
     header {visibility: hidden;}                     /* Hide Streamlit header */
-    a[data-testid="stAppGithubIcon"] {visibility: hidden;}  /* Hide GitHub icon */
+    a[data-testid="stAppGithubIcon"] {display: none !important;}  /* Hide GitHub icon (old selector) */
+    div[data-testid="stToolbar"] {display: none !important;}      /* Hide GitHub icon (new toolbar) */
+    div[data-testid="stDecoration"] {display: none !important;}   /* Hide Streamlit branding */
     div[data-testid="stConnectionStatus"] {display: none !important;}  /* Hide Manage app button */
     </style>
 """
